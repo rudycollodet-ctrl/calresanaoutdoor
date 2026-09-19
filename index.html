@@ -790,11 +790,16 @@
     if(!confirm('Eliminare questa locandina?'))return;
     window.FB.remove(id).then(function(){adminLoadList();},function(){alert('Errore durante l\'eliminazione.');});
   }
-  // triplo clic sulla P.IVA per aprire il pannello
+  // apertura pannello: triplo clic sulla P.IVA, oppure indirizzo con #pannello
   (function(){
-    var el=document.getElementById('piva'); if(!el) return;
-    var n=0,t=null;
-    el.addEventListener('click',function(){n++;clearTimeout(t);t=setTimeout(function(){n=0;},700);if(n>=3){n=0;openAdmin();}});
+    var el=document.getElementById('piva');
+    if(el){
+      var n=0,t=null;
+      el.addEventListener('click',function(){n++;clearTimeout(t);t=setTimeout(function(){n=0;},1200);if(n>=3){n=0;openAdmin();}});
+    }
+    function checkHash(){ var h=(location.hash||'').toLowerCase(); if(h==='#pannello'||h==='#admin'){ openAdmin(); } }
+    window.addEventListener('load',checkHash);
+    window.addEventListener('hashchange',checkHash);
   })();
   // callback dal modulo Firebase quando cambia lo stato di login
   window.adminAuthChanged=function(user){
