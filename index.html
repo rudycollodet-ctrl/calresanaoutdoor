@@ -553,8 +553,6 @@
 
     <h3>Modifiche</h3>
     <p>Questa informativa può essere aggiornata nel tempo. Le modifiche saranno pubblicate su questa pagina.</p>
-
-    <div class="legal-note">Nota: testo fornito come modello di base. Ti consigliamo di farlo verificare da un professionista, in particolare se aggiungerai moduli di contatto, statistiche o mappe.</div>
   </div>
 </div>
 
@@ -719,23 +717,28 @@
 
   /* --- pannello locandine (area riservata · Firebase) --- */
   function _v(id){var e=document.getElementById(id);return e?(e.value||'').trim():'';}
+  function fbConfigured(){var c=window.FIREBASE_CONFIG||{};return !!(c.apiKey && c.projectId && String(c.projectId).indexOf('INSERISCI')!==0);}
+  function waitFB(cb,tries){tries=tries||0;if(window.FB&&window.FB.ready){cb(true);return;}if(!fbConfigured()){cb(false);return;}if(tries>50){cb(false);return;}setTimeout(function(){waitFB(cb,tries+1);},200);}
   function openAdmin(){
-    var ready=!!(window.FB&&window.FB.ready);
-    document.getElementById('adminNotReady').style.display=ready?'none':'block';
-    document.getElementById('adminLoginForm').style.display=ready?'block':'none';
+    var conf=fbConfigured();
+    document.getElementById('adminNotReady').style.display=conf?'none':'block';
+    document.getElementById('adminLoginForm').style.display=conf?'block':'none';
     document.getElementById('adminErr').textContent='';
     if(window.__adminUser){showAdminPanel();}
     else{document.getElementById('adminGate').style.display='block';document.getElementById('adminPanel').style.display='none';}
     openModal('admin');
-    if(ready&&!window.__adminUser){setTimeout(function(){document.getElementById('adminEmail').focus();},120);}
+    if(conf&&!window.__adminUser){setTimeout(function(){document.getElementById('adminEmail').focus();},120);}
   }
   function adminLogin(){
-    if(!(window.FB&&window.FB.ready)){document.getElementById('adminErr').textContent='Firebase non ancora configurato.';return;}
+    if(!fbConfigured()){document.getElementById('adminErr').textContent='Firebase non ancora configurato.';return;}
     document.getElementById('adminErr').textContent='Accesso in corso…';
-    window.FB.login(_v('adminEmail'),document.getElementById('adminPass').value).then(function(){
-      document.getElementById('adminErr').textContent='';
-      showAdminPanel();
-    },function(){document.getElementById('adminErr').textContent='Accesso non riuscito. Controlla email e password.';});
+    waitFB(function(ok){
+      if(!ok){document.getElementById('adminErr').textContent='Collegamento a Firebase non riuscito. Ricarica la pagina (Ctrl+F5) e riprova.';return;}
+      window.FB.login(_v('adminEmail'),document.getElementById('adminPass').value).then(function(){
+        document.getElementById('adminErr').textContent='';
+        showAdminPanel();
+      },function(){document.getElementById('adminErr').textContent='Accesso non riuscito. Controlla email e password.';});
+    });
   }
   function adminLogout(){ if(window.FB){window.FB.logout();} document.getElementById('adminPanel').style.display='none'; document.getElementById('adminGate').style.display='block'; document.getElementById('adminPass').value=''; }
   function showAdminPanel(){
