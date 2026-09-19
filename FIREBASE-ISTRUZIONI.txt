@@ -1,0 +1,59 @@
+CAL RESANA OUTDOOR — CONFIGURARE FIREBASE (pubblicazione automatica locandine)
+==============================================================================
+Versione GRATUITA senza carta di credito: le immagini vengono compresse e
+salvate dentro il database (Firestore). NON serve Storage né il piano Blaze.
+
+Cosa ottieni: 3 clic sulla P.IVA -> login (email+password) -> compili e premi
+"Pubblica": l'immagine si carica da sola e la locandina appare a tutti.
+
+-------------------------------------------------
+1) PROGETTO E APP WEB   [FATTO]
+-------------------------------------------------
+La configurazione è già inserita in firebase-config.js.
+
+-------------------------------------------------
+2) FIRESTORE (database)   [FATTO]
+-------------------------------------------------
+Database creato e regole pubblicate:
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /locandine/{doc} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}
+
+-------------------------------------------------
+3) STORAGE   -> NON SERVE
+-------------------------------------------------
+In questa versione le immagini stanno nel database, quindi puoi saltare
+Storage e NON devi passare al piano Blaze.
+
+-------------------------------------------------
+4) AUTHENTICATION (login del pannello)
+-------------------------------------------------
+- Menu: "Build" -> "Authentication" -> "Inizia".
+- Scheda "Sign-in method" -> abilita "Email/Password".
+- Scheda "Users" -> "Aggiungi utente": metti la TUA email e una password.
+  Sono i dati con cui entrerai nel pannello (3 clic sulla P.IVA).
+
+-------------------------------------------------
+5) AUTORIZZA IL DOMINIO
+-------------------------------------------------
+- Authentication -> "Settings" -> "Authorized domains": aggiungi il dominio
+  del sito (es. il tuo indirizzo .vercel.app e/o il tuo dominio).
+  (localhost è già autorizzato per le prove.)
+
+-------------------------------------------------
+6) CARICA E PROVA
+-------------------------------------------------
+- Carica su Vercel tutta la cartella (compreso firebase-config.js).
+- Apri il sito, 3 clic sulla P.IVA, accedi, compila e premi "Pubblica".
+
+NOTE
+- Le immagini vengono ridotte/compresse in automatico per stare nel database
+  (ottimo per locandine e foto normali). Per stampe enormi meglio ridurle prima.
+- apiKey ecc. non sono segreti: la sicurezza è data dalle Regole e dal login.

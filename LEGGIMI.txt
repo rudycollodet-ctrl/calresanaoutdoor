@@ -1,0 +1,37 @@
+CAL RESANA OUTDOOR — SITO WEB
+=================================
+
+CONTENUTO DELLA CARTELLA
+- index.html      -> il sito (NON serve modificarlo per le promozioni)
+- locandine.js    -> l'elenco delle Novità & Promozioni (questo lo modifichi tu)
+- locandine/      -> cartella con le immagini/locandine
+
+-------------------------------------------------
+COME AGGIUNGERE UNA PROMOZIONE / ARTICOLO / ATTIVITÀ
+-------------------------------------------------
+1) Metti la foto o la locandina nella cartella "locandine/"
+   (es. locandine/mia-promo.jpg). Meglio se in verticale.
+
+2) Apri il file "locandine.js" e copia uno dei blocchi { ... }.
+   Incollalo in cima alla lista e compila i campi:
+
+     img         = nome del file immagine (es. "mia-promo.jpg")
+     badge       = "Promo", "Sconto", "Nuovo", "Attività" o "Evento" (o "")
+     titolo      = titolo
+     testo       = descrizione breve
+     prezzo      = prezzo attuale (es. "129 €") oppure ""
+     prezzoPrima = prezzo vecchio barrato (es. "159 €") oppure ""
+     data        = per attività/eventi (es. "Sab 12 ottobre") oppure ""
+
+   Lascia "" i campi che non usi. Attenzione a non togliere le virgole.
+
+3) Salva e ricarica i file su Vercel (via GitHub): la nuova locandina
+   comparirà da sola sul sito.
+
+Per RIMUOVERE una promozione: cancella il suo blocco { ... } da locandine.js.
+
+-------------------------------------------------
+Le tre locandine presenti ora ("esempio-...") sono SOLO esempi:
+sostituiscile con le tue e aggiorna locandine.js.
+-------------------------------------------------
+Se preferisci, mandami tu foto e testi e le carico io per te.
